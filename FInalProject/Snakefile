@@ -1,0 +1,25 @@
+
+rule all:
+    input:
+        "results/schooling_status.png",
+        "results/schooling_income.png",
+        "results/status_count.png",
+        "results/health_vs_lifeexp_status.png",
+        "results/health_vs_lifeexp_income.png",
+        "results/healthcare_access_vs_lifeexp.png",
+        "results/correlation.txt"
+
+rule run_analysis:
+    input:
+        "data/Life_Expectancy_Data.csv",
+        "data/world_bank_data.json"
+    output:
+        "results/schooling_status.png",
+        "results/schooling_income.png",
+        "results/status_count.png",
+        "results/health_vs_lifeexp_status.png",
+        "results/health_vs_lifeexp_income.png",
+        "results/healthcare_access_vs_lifeexp.png",
+        "results/correlation.txt"
+    script:
+        "analyze_data.py"
