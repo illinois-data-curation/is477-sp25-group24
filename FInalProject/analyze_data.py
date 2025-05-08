@@ -6,7 +6,6 @@ import statsmodels.formula.api as smf
 import os
 import json
 
-# Ensure results directory exists
 os.makedirs("results", exist_ok=True)
 
 def load_and_prepare_data():
@@ -14,7 +13,6 @@ def load_and_prepare_data():
         dev_raw = json.load(f)
     dev_df = pd.DataFrame(dev_raw)
 
-    # Read and filter only 2014 data
     health_df = pd.read_csv("data/Life_Expectancy_Data.csv", thousands=",")
     health_df = health_df[health_df["Year"] == 2014]
 
@@ -27,15 +25,12 @@ def load_and_prepare_data():
     return df
 
 
-# GDP-based Income Level classification (moved inside)
     df["Income Level"] = pd.qcut(df["GDP, PPP (current international $)"],
                                   q=2,
                                   labels=["Low Income", "High Income"])
 
-    return df  # Now this is correct
+    return df  
 
-
-# Plot Schooling by Development Status
 def plot_schooling_by_status(df):
     plt.figure(figsize=(10, 6))
     sns.stripplot(data=df, x="Status", y="Schooling", hue="Status", palette={"Developing": "skyblue", "Developed": "coral"})
@@ -43,7 +38,6 @@ def plot_schooling_by_status(df):
     plt.savefig("results/schooling_status.png")
     plt.close()
 
-# Plot Schooling by GDP-based Income Level
 def plot_schooling_by_income(df):
     plt.figure(figsize=(10, 6))
     sns.stripplot(data=df, x="Income Level", y="Schooling", hue="Income Level", palette={"Low Income": "lightgreen", "High Income": "orange"})
@@ -51,7 +45,6 @@ def plot_schooling_by_income(df):
     plt.savefig("results/schooling_income.png")
     plt.close()
 
-# Bar plot: count of Developed vs Developing
 def plot_status_counts(df):
     plt.figure(figsize=(8, 6))
     sns.countplot(data=df, x="Status", palette={"Developing": "skyblue", "Developed": "coral"})
@@ -59,21 +52,18 @@ def plot_status_counts(df):
     plt.savefig("results/status_count.png")
     plt.close()
 
-# Plot Health Expenditure vs Life Expectancy, by Status
 def plot_health_vs_lifeexp_by_status(df):
     sns.lmplot(data=df, x="Total expenditure", y="2014 Life expectancy at birth, total (years)", hue="Status", palette={"Developing": "skyblue", "Developed": "coral"})
     plt.title("Health Expenditure vs. Life Expectancy by Development Status")
     plt.savefig("results/health_vs_lifeexp_status.png")
     plt.close()
 
-# Plot Health Expenditure vs Life Expectancy, by Income Level
 def plot_health_vs_lifeexp_by_income(df):
     sns.lmplot(data=df, x="Total expenditure", y="2014 Life expectancy at birth, total (years)", hue="Income Level", palette={"Low Income": "lightgreen", "High Income": "orange"})
     plt.title("Health Expenditure vs. Life Expectancy by Income Level")
     plt.savefig("results/health_vs_lifeexp_income.png")
     plt.close()
 
-# Plot Healthcare Access vs Life Expectancy
 def plot_healthcare_access(df):
     plt.figure(figsize=(10, 6))
     sns.scatterplot(data=df, x="Total expenditure", y="2014 Life expectancy at birth, total (years)", hue="Status")
@@ -81,7 +71,6 @@ def plot_healthcare_access(df):
     plt.savefig("results/healthcare_access_vs_lifeexp.png")
     plt.close()
 
-# Compute correlation between healthcare access and life expectancy
 def compute_correlation(df):
     corr = df[["Total expenditure", "2014 Life expectancy at birth, total (years)"]].corr().iloc[0,1]
     with open("results/correlation.txt", "w") as f:
